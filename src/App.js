@@ -25,8 +25,9 @@ const App = (props) => {
                 <input
                     value={inputValue}
                     className="input"
-                    type="text"
+                    type="number"
                     placeholder=""
+                    autofocus
                     onChange={(e) => setInputValue(e.target.value)}
                 />
                 <div className="counter">{value}</div>
