@@ -1,25 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import "./App.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = (props) => {
+    const [currency, setCurrency] = useState("USD");
+    const [value, setValue] = useState(null);
+    const [inputValue, setInputValue] = useState(0);
+
+    useEffect(() => {
+        fetch("https://www.cbr-xml-daily.ru/daily_json.js")
+            .then((response) => response.json())
+            .then((data) => {
+                const count = data.Valute[currency].Value;
+                setValue((inputValue * count).toFixed(2));
+            });
+    }, [currency, inputValue]);
+
+    return (
+        <div className="app">
+            <div className="wrapper-valute">
+                <span>{currency}</span>
+                <span>RUB</span>
+            </div>
+            <div className="wrapper-field">
+                <input
+                    value={inputValue}
+                    className="input"
+                    type="text"
+                    placeholder=""
+                    onChange={(e) => setInputValue(e.target.value)}
+                />
+                <div className="counter">{value}</div>
+            </div>
+
+            <div className="controls">
+                <button onClick={() => setCurrency("USD")}>USD</button>
+                <button onClick={() => setCurrency("EUR")}>EUR</button>
+                <button onClick={() => setCurrency("CNY")}>CNY</button>
+            </div>
+        </div>
+    );
+};
 
 export default App;
